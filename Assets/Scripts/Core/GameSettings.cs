@@ -4,7 +4,9 @@ public class GameSettings : MonoBehaviour
 {
     public static GameSettings Instance;
 
-    public bool isVsAI = false; // <-- Add this line
+    public bool isVsAI = false; 
+
+    
 
     private void Awake()
     {

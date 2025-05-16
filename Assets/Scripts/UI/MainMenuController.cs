@@ -15,7 +15,7 @@ public class MainMenuController : MonoBehaviour
     public Transform scoresContainer; // Assign in Inspector
     public GameObject scoreTextPrefab; // A prefab or just create Text objects dynamically (optional)
 
-
+    public GameObject panelPongModeSelect;
 
 
 
@@ -29,6 +29,7 @@ public class MainMenuController : MonoBehaviour
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(false);
+        panelPongModeSelect.SetActive(false);
     }
 
     public void ShowHighScores()
@@ -38,24 +39,37 @@ public class MainMenuController : MonoBehaviour
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(false);
+        panelPongModeSelect.SetActive(false);
     }
 
     public void ShowSettings()
     {
         panelMain.SetActive(false);
-        panelHighScores.SetActive(true);
+        panelHighScores.SetActive(false);
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(true);
         panelSelectGame.SetActive(false);
+        panelPongModeSelect.SetActive(false);
     }
 
     public void ShowSelectGame()
     {
         panelMain.SetActive(false);
-        panelHighScores.SetActive(true);
+        panelHighScores.SetActive(false);
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(true);
+        panelPongModeSelect.SetActive(false);
+    }
+
+    public void ShowPongModeSelect()
+    {
+        panelMain.SetActive(false);
+        panelHighScores.SetActive(false);
+        panelHighScoreList.SetActive(false);
+        panelSettings.SetActive(false);
+        panelSelectGame.SetActive(false);
+        panelPongModeSelect.SetActive(true);
     }
 
     public void ExitGame()

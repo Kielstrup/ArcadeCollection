@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 108468889}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -475,6 +475,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   inputAxis: Vertical2
+  isAI: 0
+  ball: {fileID: 0}
+  aiSpeed: 2
 --- !u!61 &516724066
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1482,6 +1485,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   inputAxis: Vertical
+  isAI: 0
+  ball: {fileID: 0}
+  aiSpeed: 6
 --- !u!61 &1930405100
 BoxCollider2D:
   m_ObjectHideFlags: 0
