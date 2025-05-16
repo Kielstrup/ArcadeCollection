@@ -1213,11 +1213,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftPlayerScore: 0
   rightPlayerScore: 0
-  leftScoreText: {fileID: 0}
-  rightScoreText: {fileID: 0}
+  leftScoreText: {fileID: 1770029371}
+  rightScoreText: {fileID: 1665277397}
   ball: {fileID: 108468889}
   ballStartPosition: {fileID: 1644434949}
   resetDelay: 1.5
+  winningScore: 5
 --- !u!4 &1670545034
 Transform:
   m_ObjectHideFlags: 0

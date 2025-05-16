@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -9,12 +10,13 @@ public class MainMenuController : MonoBehaviour
     public GameObject panelHighScores;
     public GameObject panelHighScoreList;
     public GameObject panelSettings;
+    public GameObject panelSelectGame;
     public TextMeshProUGUI textGameTitle; // Assign in Inspector
     public Transform scoresContainer; // Assign in Inspector
     public GameObject scoreTextPrefab; // A prefab or just create Text objects dynamically (optional)
 
-    
-    
+
+
 
 
 
@@ -26,6 +28,7 @@ public class MainMenuController : MonoBehaviour
         panelHighScores.SetActive(false);
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(false);
+        panelSelectGame.SetActive(false);
     }
 
     public void ShowHighScores()
@@ -34,6 +37,7 @@ public class MainMenuController : MonoBehaviour
         panelHighScores.SetActive(true);
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(false);
+        panelSelectGame.SetActive(false);
     }
 
     public void ShowSettings()
@@ -42,6 +46,16 @@ public class MainMenuController : MonoBehaviour
         panelHighScores.SetActive(true);
         panelHighScoreList.SetActive(false);
         panelSettings.SetActive(true);
+        panelSelectGame.SetActive(false);
+    }
+
+    public void ShowSelectGame()
+    {
+        panelMain.SetActive(false);
+        panelHighScores.SetActive(true);
+        panelHighScoreList.SetActive(false);
+        panelSettings.SetActive(false);
+        panelSelectGame.SetActive(true);
     }
 
     public void ExitGame()
@@ -61,7 +75,7 @@ public class MainMenuController : MonoBehaviour
         // Load and display high scores for the selected gam
         LoadHighScoresForGame(gameName);
     }
-    
+
     public void LoadHighScoresForGame(string gameName)
     {
         textGameTitle.text = gameName + " High Scores";
@@ -101,6 +115,18 @@ public class MainMenuController : MonoBehaviour
             scoreText.text = $"{rank}. {entry.playerName} - {entry.score}";
             rank++;
         }
+    }
+    
+    public void StartPongVsPlayer()
+    {
+        GameSettings.Instance.isVsAI = false;
+        SceneManager.LoadScene("Pong");
+    }
+
+    public void StartPongVsAI()
+    {
+        GameSettings.Instance.isVsAI = true;
+        SceneManager.LoadScene("Pong");
     }
 
 
