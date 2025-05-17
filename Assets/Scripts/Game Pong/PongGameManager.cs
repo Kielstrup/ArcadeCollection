@@ -1,5 +1,7 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PongGameManager : MonoBehaviour
 {
@@ -15,6 +17,12 @@ public class PongGameManager : MonoBehaviour
 
     public float resetDelay = 1.5f;
     public int winningScore = 5;
+    public GameObject startPanel;
+    public GameObject endPanel;
+    public TextMeshProUGUI endGameText;
+    public GameObject leftPaddle;
+    public GameObject rightPaddle;
+    private bool gameStarted = false;
 
     [System.Obsolete]
     public void ScoreLeft()
@@ -41,7 +49,7 @@ public class PongGameManager : MonoBehaviour
     }
 
     [System.Obsolete]
-    System.Collections.IEnumerator ResetBall()
+    IEnumerator ResetBall()
     {
         ball.gameObject.SetActive(false);
         yield return new WaitForSeconds(resetDelay);
@@ -53,6 +61,14 @@ public class PongGameManager : MonoBehaviour
     private void Start()
     {
         UpdateScoreUI();
+
+        startPanel.SetActive(true);
+        endPanel.SetActive(false);
+
+        leftPaddle.SetActive(false);
+        rightPaddle.SetActive(false);
+        ball.gameObject.SetActive(false);
+
     }
     private void CheckVictory()
     {
@@ -70,14 +86,53 @@ public class PongGameManager : MonoBehaviour
 
     private void EndGame(string winnerMessage)
     {
-        // Disable ball and paddles, or show a victory UI panel, etc.
+        gameStarted = false;
+
         ball.gameObject.SetActive(false);
-    
+        leftPaddle.SetActive(false);
+        rightPaddle.SetActive(false);
 
-        // Show victory message (you can create a UI Text or popup for this)
-        Debug.Log(winnerMessage);
+        endGameText.text = winnerMessage;
+        endPanel.SetActive(true);
+    }
 
-        // You could also add logic here to restart or return to menu
+    [System.Obsolete]
+    public void OnStartButtonPressed()
+    {
+        startPanel.SetActive(false);
+        leftPaddle.SetActive(true);
+        rightPaddle.SetActive(true);
+        ball.gameObject.SetActive(true);
+
+        gameStarted = true;
+
+        StartCoroutine(DelayedBallLaunch());
+    }
+
+    [System.Obsolete]
+    private IEnumerator DelayedBallLaunch()
+    {
+        ball.gameObject.SetActive(false);
+        yield return new WaitForSeconds(resetDelay);
+        ball.gameObject.SetActive(true);
+        ball.LaunchBall();
+
+    }
+
+    [System.Obsolete]
+    public void OnRestartButtonPressed()
+    {
+        leftPlayerScore = 0;
+        rightPlayerScore = 0;
+        UpdateScoreUI();
+        endPanel.SetActive(false);
+
+        leftPaddle.SetActive(true);
+        rightPaddle.SetActive(true);
+        ball.gameObject.SetActive(true);
+
+        gameStarted = true;
+        StartCoroutine(DelayedBallLaunch());
     }
 
     
