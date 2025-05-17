@@ -22,9 +22,9 @@ public class PongGameManager : MonoBehaviour
     public TextMeshProUGUI endGameText;
     public GameObject leftPaddle;
     public GameObject rightPaddle;
-    private bool gameStarted = false;
+    public bool isGameStarted = false;
 
-    [System.Obsolete]
+
     public void ScoreLeft()
     {
         leftPlayerScore++;
@@ -33,7 +33,7 @@ public class PongGameManager : MonoBehaviour
         StartCoroutine(ResetBall());
     }
 
-    [System.Obsolete]
+    
     public void ScoreRight()
     {
         rightPlayerScore++;
@@ -48,7 +48,7 @@ public class PongGameManager : MonoBehaviour
         rightScoreText.text = rightPlayerScore.ToString();
     }
 
-    [System.Obsolete]
+    
     IEnumerator ResetBall()
     {
         ball.gameObject.SetActive(false);
@@ -60,11 +60,10 @@ public class PongGameManager : MonoBehaviour
 
     private void Start()
     {
+        isGameStarted = false;
         UpdateScoreUI();
-
         startPanel.SetActive(true);
         endPanel.SetActive(false);
-
         leftPaddle.SetActive(false);
         rightPaddle.SetActive(false);
         ball.gameObject.SetActive(false);
@@ -86,7 +85,7 @@ public class PongGameManager : MonoBehaviour
 
     private void EndGame(string winnerMessage)
     {
-        gameStarted = false;
+        isGameStarted = false;
 
         ball.gameObject.SetActive(false);
         leftPaddle.SetActive(false);
@@ -96,20 +95,18 @@ public class PongGameManager : MonoBehaviour
         endPanel.SetActive(true);
     }
 
-    [System.Obsolete]
+    
     public void OnStartButtonPressed()
     {
+        isGameStarted = true;
         startPanel.SetActive(false);
         leftPaddle.SetActive(true);
         rightPaddle.SetActive(true);
         ball.gameObject.SetActive(true);
-
-        gameStarted = true;
-
         StartCoroutine(DelayedBallLaunch());
     }
 
-    [System.Obsolete]
+    
     private IEnumerator DelayedBallLaunch()
     {
         ball.gameObject.SetActive(false);
@@ -119,7 +116,7 @@ public class PongGameManager : MonoBehaviour
 
     }
 
-    [System.Obsolete]
+    
     public void OnRestartButtonPressed()
     {
         leftPlayerScore = 0;
@@ -131,8 +128,13 @@ public class PongGameManager : MonoBehaviour
         rightPaddle.SetActive(true);
         ball.gameObject.SetActive(true);
 
-        gameStarted = true;
+        isGameStarted = true;
         StartCoroutine(DelayedBallLaunch());
+    }
+
+    public void OnBackButtonPressed()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 
     

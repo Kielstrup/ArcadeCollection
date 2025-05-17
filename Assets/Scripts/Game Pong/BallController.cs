@@ -7,25 +7,31 @@ public class BallController : MonoBehaviour
     public float speedIncreaseFactor = 1.05f;
     private Rigidbody2D rb;
 
-    [System.Obsolete]
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         LaunchBall();
     }
 
-    [System.Obsolete]
+    
     public void LaunchBall()
     {
+
+        if (!FindAnyObjectByType<PongGameManager>().isGameStarted)
+        {
+            return;
+        }
+
         // Random initial direction
-        float x = Random.Range(0, 2) == 0 ? -1 : 1;
+            float x = Random.Range(0, 2) == 0 ? -1 : 1;
         float y = Random.Range(-1f, 1f);
         Vector2 direction = new Vector2(x, y).normalized;
 
-        rb.velocity = direction * speed;
+        rb.linearVelocity = direction * speed;
     }
 
-    [System.Obsolete]
+
     void OnCollisionEnter2D(Collision2D collision)
     {
 
@@ -38,7 +44,7 @@ public class BallController : MonoBehaviour
             float x = (transform.position.x < 0) ? 1 : -1;
 
             Vector2 dir = new Vector2(x, y).normalized;
-            rb.velocity = dir * (rb.velocity.magnitude * 1.05f);
+            rb.linearVelocity = dir * (rb.linearVelocity.magnitude * 1.05f);
 
         }
     }
@@ -50,7 +56,7 @@ public class BallController : MonoBehaviour
     
     }
 
-    [System.Obsolete]
+    
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("GoalLeft"))
