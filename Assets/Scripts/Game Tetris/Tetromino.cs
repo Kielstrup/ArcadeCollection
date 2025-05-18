@@ -58,15 +58,29 @@ public class Tetromino : MonoBehaviour
             transform.position -= direction;
         }
     }
+    
     void Rotate()
     {
         transform.Rotate(0f, 0f, 90f);
+
         if (!IsValidMove())
         {
+            // Try wall kick left
+            transform.position += UnityEngine.Vector3.left;
+            if (IsValidMove()) return;
+
+            // Try wall kick right
+            transform.position += UnityEngine.Vector3.right * 2; // total of +1 from original
+            if (IsValidMove()) return;
+
+            // Undo wall kicks
+            transform.position += UnityEngine.Vector3.left;
+
+            // Final fallback: undo rotation
             transform.Rotate(0f, 0f, -90f);
         }
-
     }
+
 
     bool IsValidMove()
     {

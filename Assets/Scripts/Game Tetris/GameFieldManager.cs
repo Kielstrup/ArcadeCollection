@@ -84,7 +84,7 @@ public class GameFieldManager : MonoBehaviour
             {
                 DeleteRow(y);
                 MoveRowsDown(y + 1);
-                y--
+                y--;
                 linesCleared++;
             }
         }
