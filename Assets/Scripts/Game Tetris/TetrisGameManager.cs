@@ -40,7 +40,7 @@ public class TetrisGameManager : MonoBehaviour
         int spawnX = Tetromino.gridWidth / 2;
         int spawnY = Tetromino.gridHeight;
         int randomIndex = Random.Range(0, tetrominoPrefabs.Length);
-        Instantiate(tetrominoPrefabs[randomIndex], new UnityEngine.Vector3(spawnX, spawnY, 0), Quaternion.identity)
+        Instantiate(tetrominoPrefabs[randomIndex], new UnityEngine.Vector3(spawnX, spawnY, 0), Quaternion.identity);
     }
 
     public void AddScore(int linesCleared)

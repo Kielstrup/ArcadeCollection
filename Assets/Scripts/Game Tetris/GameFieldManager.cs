@@ -53,43 +53,45 @@ public class GameFieldManager : MonoBehaviour
         }
     }
 
-    public void MoveRowsDown(int startY)
-{
-    for (int y = startY; y < height; y++)
+    public void MoveRowsDown(int fromY)
     {
-        int currentY = y;
-        while (currentY > 0)
+        for (int y = fromY; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                if (grid[x, currentY] != null)
+                if (grid[x, y] != null)
                 {
-                    grid[x, currentY - 1] = grid[x, currentY];
-                    grid[x, currentY] = null;
-                    grid[x, currentY - 1].position += Vector3.down;
+                    // Move block down by 1
+                    grid[x, y - 1] = grid[x, y];
+                    grid[x, y] = null;
+
+                    // Move the block in the scene
+                    grid[x, y - 1].position += Vector3.down;
                 }
             }
-            currentY--;
         }
     }
-}
+
 
 
     public int ClearFullRows()
     {
         int linesCleared = 0;
+
         for (int y = 0; y < height; ++y)
         {
             if (IsRowFull(y))
             {
                 DeleteRow(y);
                 MoveRowsDown(y + 1);
-                y--;
+                y--
                 linesCleared++;
             }
         }
+
         return linesCleared;
     }
+
 
     public bool IsGameOver()
     {
