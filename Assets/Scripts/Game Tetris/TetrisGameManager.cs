@@ -68,6 +68,13 @@ public class TetrisGameManager : MonoBehaviour
         uiManager.ShowEndGamePanel(score);
         inputInitials.text = "";
         inputInitials.ActivateInputField();
+
+
+        //Hides the preview so its not visible during game-over
+        if (nextTetrominoPreview != null)
+        {
+            nextTetrominoPreview.SetActive(false);
+        }
     }
 
     /// <summary>
