@@ -9,16 +9,19 @@ public class Tetromino : MonoBehaviour
     private float previousTime;
     public static int gridWidth = 10;
     public static int gridHeight = 20;
+    private TetrisGameManager gameManager;
+    private GameFieldManager fieldManager;
 
     void Update()
     {
         if (Time.time - previousTime > fallTime)
         {
-            transform.position += new UnityEngine.Vector3(0, -1, 0);
+            transform.position += UnityEngine.Vector3.down;
 
             if (!IsValidMove())
             {
-                transform.position += new UnityEngine.Vector3(0, 1, 0);
+                transform.position += UnityEngine.Vector3.up;
+                LockTetromino();
                 enabled = false;
             }
 
@@ -39,7 +42,7 @@ public class Tetromino : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            fallTime = 0.0f;
+            fallTime = 0.05f;
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
@@ -60,12 +63,58 @@ public class Tetromino : MonoBehaviour
         transform.Rotate(0f, 0f, 90f);
         if (!IsValidMove())
         {
-            transform.Rotate(0f, 0f, 90f);
+            transform.Rotate(0f, 0f, -90f);
         }
 
     }
 
-    bool IsValidMove() {
+    bool IsValidMove()
+    {
+        foreach (Transform block in transform)
+        {
+            UnityEngine.Vector2 pos = fieldManager.RoundVector(block.position);
+
+            if (!fieldManager.IsInsideGrid(pos))
+            {
+                return false;
+            }
+            if (fieldManager.grid[(int)pos.x, (int)pos.y] != null)
+            {
+                return false;
+            }
+        }
         return true;
+    }
+
+    void LockTetromino()
+    {
+        foreach (Transform block in transform)
+        {
+            UnityEngine.Vector2 pos = fieldManager.RoundVector(block.position);
+            if ((int)pos.y < gridHeight)
+            {
+                fieldManager.grid[(int)pos.x, (int)pos.y] = block;
+            }
+        }
+
+        int linesCleared = fieldManager.ClearFullRows();
+        gameManager.AddScore(linesCleared);
+
+        if (fieldManager.IsGameOver())
+        {
+            gameManager.GameOver();
+        }
+        else
+        {
+            gameManager.SpawnNewTetromino();
+        }
+
+        Destroy(this);
+    }
+
+    void Start()
+    {
+        gameManager = FindObjectOfType<TetrisGameManager>();
+        fieldManager = FindObjectOfType<GameFieldManager>();
     }
 }

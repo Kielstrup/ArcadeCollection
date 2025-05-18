@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class GameFieldManager : MonoBehaviour
 {
-    int width = Tetromino.gridWidth;
+    private int width => Tetromino.gridWidth;
 
-    int height = Tetromino.gridHeight;
+    private int height => Tetromino.gridHeight;
 
     public Transform[,] grid;
 
@@ -26,7 +26,7 @@ public class GameFieldManager : MonoBehaviour
     public void AddToGrid(Transform block)
     {
         Vector2 pos = RoundVector(block.position);
-        if (pos.y > height)
+        if ((int)pos.y < height)
         {
             grid[(int)pos.x, (int)pos.y] = block;
         }
@@ -54,23 +54,30 @@ public class GameFieldManager : MonoBehaviour
     }
 
     public void MoveRowsDown(int startY)
+{
+    for (int y = startY; y < height; y++)
     {
-        for (int y = startY; y < height; ++y)
+        int currentY = y;
+        while (currentY > 0)
         {
-            for (int x = 0; x < width; ++x)
+            for (int x = 0; x < width; x++)
             {
-                if (grid[x, y] != null)
+                if (grid[x, currentY] != null)
                 {
-                    grid[x, y - 1] = grid[x, y];
-                    grid[x, y] = null;
-                    grid[x, y - 1].position += Vector3.down;
+                    grid[x, currentY - 1] = grid[x, currentY];
+                    grid[x, currentY] = null;
+                    grid[x, currentY - 1].position += Vector3.down;
                 }
             }
+            currentY--;
         }
     }
+}
 
-    public void ClearFullRows()
+
+    public int ClearFullRows()
     {
+        int linesCleared = 0;
         for (int y = 0; y < height; ++y)
         {
             if (IsRowFull(y))
@@ -78,7 +85,21 @@ public class GameFieldManager : MonoBehaviour
                 DeleteRow(y);
                 MoveRowsDown(y + 1);
                 y--;
+                linesCleared++;
             }
         }
+        return linesCleared;
+    }
+
+    public bool IsGameOver()
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            if (grid[x, height - 1] != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

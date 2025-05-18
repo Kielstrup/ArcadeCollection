@@ -1,9 +1,16 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TetrisGameManager : MonoBehaviour
 {
     public GameObject gameOverPanel;
+
+    public GameUIManager uiManager;
+
+    public GameObject[] tetrominoPrefabs;
+
+    private int score = 0;
 
     private void Start()
     {
@@ -13,8 +20,7 @@ public class TetrisGameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameOverPanel.SetActive(true);
-        Time.timeScale = 0f;
+        uiManager.ShowEndGamePanel(score);
     }
 
     public void RestartGame()
@@ -26,11 +32,20 @@ public class TetrisGameManager : MonoBehaviour
     public void BackToMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenuu");
+        SceneManager.LoadScene("MainMenu");
     }
 
     void SpawnNewTetromino()
     {
-        //Logic Here
+        int spawnX = Tetromino.gridWidth / 2;
+        int spawnY = Tetromino.gridHeight;
+        int randomIndex = Random.Range(0, tetrominoPrefabs.Length);
+        Instantiate(tetrominoPrefabs[randomIndex], new UnityEngine.Vector3(spawnX, spawnY, 0), Quaternion.identity)
+    }
+
+    public void AddScore(int linesCleared)
+    {
+        score += linesCleared * 100;
+        uiManager.UpdateScore(score);
     }
 }

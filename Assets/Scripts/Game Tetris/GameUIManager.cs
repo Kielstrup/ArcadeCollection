@@ -8,6 +8,7 @@ public class GameUIManager : MonoBehaviour
     public TextMeshProUGUI finalScoreText;
 
     private int finalScore = 0;
+    public TextMeshProUGUI scoreText;
 
     void Start()
     {
@@ -34,6 +35,11 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 1f;
         //TODO: Add saving
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void UpdateScore(int score)
+    {
+        scoreText.text = $"Score: {score}";
     }
     
 }
