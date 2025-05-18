@@ -3,10 +3,14 @@ using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UIElements;
 
 public class TetrisGameManager : MonoBehaviour
 {
     public GameObject gameOverPanel;
+
+    public TMP_InputField inputInitials;
 
     public GameUIManager uiManager;
 
@@ -27,8 +31,8 @@ public class TetrisGameManager : MonoBehaviour
 
     public float baseFallTime = 1f;
 
-    public float fallTimeDecrease = 0.05f;
-    private float currentFallTime;
+    public float fallTimeDecrease = 0.02f;
+    public float currentFallTime;
 
     private void Start()
     {
@@ -57,6 +61,8 @@ public class TetrisGameManager : MonoBehaviour
     public void GameOver()
     {
         uiManager.ShowEndGamePanel(score);
+        inputInitials.text = "";
+        inputInitials.ActivateInputField();
     }
 
     public void RestartGame()

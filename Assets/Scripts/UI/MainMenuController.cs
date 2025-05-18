@@ -14,8 +14,8 @@ public class MainMenuController : MonoBehaviour
     public TextMeshProUGUI textGameTitle; // Assign in Inspector
     public Transform scoresContainer; // Assign in Inspector
     public GameObject scoreTextPrefab; // A prefab or just create Text objects dynamically (optional)
-
     public GameObject panelPongModeSelect;
+    public GameObject panelStartTetris;
 
 
 
@@ -30,6 +30,7 @@ public class MainMenuController : MonoBehaviour
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(false);
         panelPongModeSelect.SetActive(false);
+        panelStartTetris.SetActive(false);
     }
 
     public void ShowHighScores()
@@ -40,6 +41,7 @@ public class MainMenuController : MonoBehaviour
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(false);
         panelPongModeSelect.SetActive(false);
+        panelStartTetris.SetActive(false);
     }
 
     public void ShowSettings()
@@ -50,6 +52,7 @@ public class MainMenuController : MonoBehaviour
         panelSettings.SetActive(true);
         panelSelectGame.SetActive(false);
         panelPongModeSelect.SetActive(false);
+        panelStartTetris.SetActive(false);
     }
 
     public void ShowSelectGame()
@@ -60,6 +63,7 @@ public class MainMenuController : MonoBehaviour
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(true);
         panelPongModeSelect.SetActive(false);
+        panelStartTetris.SetActive(false);
     }
 
     public void ShowPongModeSelect()
@@ -70,6 +74,18 @@ public class MainMenuController : MonoBehaviour
         panelSettings.SetActive(false);
         panelSelectGame.SetActive(false);
         panelPongModeSelect.SetActive(true);
+        panelStartTetris.SetActive(false);
+    }
+
+    public void ShowTetrisStartPanel()
+    {
+        panelMain.SetActive(false);
+        panelHighScores.SetActive(false);
+        panelHighScoreList.SetActive(false);
+        panelSettings.SetActive(false);
+        panelSelectGame.SetActive(false);
+        panelPongModeSelect.SetActive(false);
+        panelStartTetris.SetActive(true);
     }
 
     public void ExitGame()
@@ -130,7 +146,7 @@ public class MainMenuController : MonoBehaviour
             rank++;
         }
     }
-    
+
     public void StartPongVsPlayer()
     {
         GameSettings.Instance.isVsAI = false;
@@ -141,6 +157,11 @@ public class MainMenuController : MonoBehaviour
     {
         GameSettings.Instance.isVsAI = true;
         SceneManager.LoadScene("Pong");
+    }
+
+    public void StartTetris()
+    {
+        SceneManager.LoadScene("Tetris");
     }
 
 

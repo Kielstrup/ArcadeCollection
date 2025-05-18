@@ -46,7 +46,14 @@ public class Tetromino : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            fallTime = 1f;
+            if (gameManager != null)
+            {
+                fallTime = gameManager.currentFallTime;
+            }
+            else
+            {
+                fallTime = 1f;
+            }
         }
     
     }
