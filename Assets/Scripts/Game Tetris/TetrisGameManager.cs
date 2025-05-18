@@ -1,22 +1,33 @@
 using System;
-using System.Runtime.CompilerServices;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// Manages the core Tetris gameplay including spawning tetrominos,
+/// handling hold mechanics, scoring, and game over flow.
+/// </summary>
 public class TetrisGameManager : MonoBehaviour
 {
+    [Header("UI & Panels")]
     public GameObject gameOverPanel;
-
     public TMP_InputField inputInitials;
-
     public GameUIManager uiManager;
 
+    [Header("Tetromino Settings")]
     public GameObject[] tetrominoPrefabs;
 
+    [Header("Spawn & Hold Points")]
+    public Transform spawnPoint;
+    public Transform holdPoint;
+    public Transform nextPoint;
+
+    [Header("Gameplay Timing")]
+    public float baseFallTime = 1f;
+    public float fallTimeDecrease = 0.02f;
+
     private int score = 0;
+    public float currentFallTime;
 
     private GameObject currentTetromino;
     private GameObject nextTetrominoPreview;
@@ -25,39 +36,33 @@ public class TetrisGameManager : MonoBehaviour
     private GameObject holdTetromino;
     private bool holdUsedThisTurn = false;
 
-    public Transform spawnPoint;
-    public Transform holdPoint;
-    public Transform nextPoint;
-
-    public float baseFallTime = 1f;
-
-    public float fallTimeDecrease = 0.02f;
-    public float currentFallTime;
-
     private void Start()
     {
         gameOverPanel.SetActive(false);
         currentFallTime = baseFallTime;
 
         SpawnNextTetrominoPreview();
-
         SpawnNewTetromino();
     }
 
-    void SpawnNextTetrominoPreview()
+    /// <summary>
+    /// Spawns and shows the next tetromino preview (disabled so it doesn't move).
+    /// </summary>
+    private void SpawnNextTetrominoPreview()
     {
         int randomIndex = UnityEngine.Random.Range(0, tetrominoPrefabs.Length);
         nextTetromino = tetrominoPrefabs[randomIndex];
 
         if (nextTetrominoPreview != null)
-        {
             Destroy(nextTetrominoPreview);
-        }
 
         nextTetrominoPreview = Instantiate(nextTetromino, nextPoint.position, Quaternion.identity);
-        nextTetrominoPreview.GetComponent<Tetromino>().enabled = false;
+        nextTetrominoPreview.GetComponent<Tetromino>().enabled = false; // Disable behavior for preview
     }
 
+    /// <summary>
+    /// Called when the game ends to show the game over UI and reset input field.
+    /// </summary>
     public void GameOver()
     {
         uiManager.ShowEndGamePanel(score);
@@ -65,21 +70,30 @@ public class TetrisGameManager : MonoBehaviour
         inputInitials.ActivateInputField();
     }
 
+    /// <summary>
+    /// Reloads the current scene to restart the game.
+    /// </summary>
     public void RestartGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    /// <summary>
+    /// Returns to the main menu scene.
+    /// </summary>
     public void BackToMainMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 
+    /// <summary>
+    /// Spawns the current tetromino from the next tetromino, updates fall speed, and prepares the next preview.
+    /// </summary>
     public void SpawnNewTetromino()
     {
-        currentTetromino = Instantiate(nextTetromino, spawnPoint.position,Quaternion.identity);
+        currentTetromino = Instantiate(nextTetromino, spawnPoint.position, Quaternion.identity);
         holdUsedThisTurn = false;
 
         Tetromino t = currentTetromino.GetComponent<Tetromino>();
@@ -88,41 +102,41 @@ public class TetrisGameManager : MonoBehaviour
             t.fallTime = currentFallTime;
         }
 
+        // Decrease fall time but never below 0.1 seconds
         currentFallTime = Math.Max(0.1f, currentFallTime - fallTimeDecrease);
 
         SpawnNextTetrominoPreview();
     }
 
+    /// <summary>
+    /// Holds the current tetromino or swaps with the hold if already held.
+    /// Only allowed once per drop.
+    /// </summary>
     public void HoldCurrentTetromino()
     {
-        if (holdUsedThisTurn) return;  // Prevent multiple holds per drop
+        if (holdUsedThisTurn)
+            return;  // Prevent multiple holds in one turn
 
         if (holdTetromino == null)
         {
-            // No hold yet, store current tetromino
+            // First time holding - store current and spawn new tetromino
             holdTetromino = currentTetromino;
             holdTetromino.transform.position = holdPoint.position;
-            holdTetromino.gameObject.SetActive(false);  // hide in hold spot
+            holdTetromino.SetActive(false);  // Hide held piece
 
-            // Spawn new tetromino from next
             Destroy(currentTetromino);
             SpawnNewTetromino();
         }
         else
         {
-            // Swap current and hold tetromino
-
-            // Store reference to current
+            // Swap current with hold tetromino
             GameObject tempCurrent = currentTetromino;
 
-            // Reactivate hold piece and move to spawn
             holdTetromino.SetActive(true);
             holdTetromino.transform.position = spawnPoint.position;
 
-            // Set current tetromino to hold piece
             currentTetromino = holdTetromino;
 
-            // Store previous current as hold piece, hide and move to hold position
             holdTetromino = tempCurrent;
             holdTetromino.transform.position = holdPoint.position;
             holdTetromino.SetActive(false);
@@ -132,13 +146,16 @@ public class TetrisGameManager : MonoBehaviour
         UpdateHoldPreview();
     }
 
-
-    void UpdateHoldPreview()
+    /// <summary>
+    /// Updates the hold preview visual by destroying old and instantiating new preview (disabled script).
+    /// </summary>
+    private void UpdateHoldPreview()
     {
         foreach (Transform child in holdPoint)
         {
             Destroy(child.gameObject);
         }
+
         if (holdTetromino != null)
         {
             GameObject preview = Instantiate(holdTetromino, holdPoint.position, Quaternion.identity);
@@ -147,6 +164,10 @@ public class TetrisGameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds score based on lines cleared and updates UI.
+    /// </summary>
+    /// <param name="linesCleared">Number of lines cleared at once.</param>
     public void AddScore(int linesCleared)
     {
         score += linesCleared * 100;
