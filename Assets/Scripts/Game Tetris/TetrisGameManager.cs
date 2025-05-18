@@ -35,7 +35,7 @@ public class TetrisGameManager : MonoBehaviour
 
     void SpawnNextTetrominoPreview()
     {
-        int randomIndex = Random.Range(0, tetrominoPrefabs.Length);
+        int randomIndex = UnityEngine.Random.Range(0, tetrominoPrefabs.Length);
         nextTetromino = tetrominoPrefabs[randomIndex];
 
         if (nextTetrominoPreview != null)
@@ -74,33 +74,43 @@ public class TetrisGameManager : MonoBehaviour
 
     public void HoldCurrentTetromino()
     {
-        if (holdUsedThisTurn) return;
+        if (holdUsedThisTurn) return;  // Prevent multiple holds per drop
 
         if (holdTetromino == null)
         {
+            // No hold yet, store current tetromino
             holdTetromino = currentTetromino;
-            holdTetromino.transform.position == holdPoint.position;
-            holdTetromino.SetActive(false);
+            holdTetromino.transform.position = holdPoint.position;
+            holdTetromino.gameObject.SetActive(false);  // hide in hold spot
 
+            // Spawn new tetromino from next
             Destroy(currentTetromino);
             SpawnNewTetromino();
         }
         else
         {
-            GameObject temp = holdTetromino;
+            // Swap current and hold tetromino
 
-            holdTetromino = currentTetromino;
+            // Store reference to current
+            GameObject tempCurrent = currentTetromino;
+
+            // Reactivate hold piece and move to spawn
+            holdTetromino.SetActive(true);
+            holdTetromino.transform.position = spawnPoint.position;
+
+            // Set current tetromino to hold piece
+            currentTetromino = holdTetromino;
+
+            // Store previous current as hold piece, hide and move to hold position
+            holdTetromino = tempCurrent;
             holdTetromino.transform.position = holdPoint.position;
             holdTetromino.SetActive(false);
-
-            Destroy(currentTetromino);
-
-            currentTetromino = Instantiate(temp, spawnPoint.position, Quaternion.identity);
         }
 
         holdUsedThisTurn = true;
         UpdateHoldPreview();
     }
+
 
     void UpdateHoldPreview()
     {
