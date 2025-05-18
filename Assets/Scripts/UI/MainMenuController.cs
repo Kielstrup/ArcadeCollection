@@ -102,7 +102,7 @@ public class MainMenuController : MonoBehaviour
         // Show HighScoreList panel
         panelHighScoreList.SetActive(true);
 
-        // Load and display high scores for the selected gam
+        // Load and display high scores for the selected game
         LoadHighScoresForGame(gameName);
     }
 
