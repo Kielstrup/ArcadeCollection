@@ -67,7 +67,7 @@ public class GameUIManager : MonoBehaviour
             return;
         }
 
-        HighScoreManager.Instance.AddHighScore("Tetris", playerInitials, finalScore);
+        HighScoreManager.Instance.AddHighScore("Block Game", playerInitials, finalScore);
 
         Time.timeScale = 1f; // Resume the game
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -87,7 +87,7 @@ public class GameUIManager : MonoBehaviour
             return;
         }
 
-        HighScoreManager.Instance.AddHighScore("Tetris", playerInitials, finalScore);
+        HighScoreManager.Instance.AddHighScore("Block Game", playerInitials, finalScore);
 
         Time.timeScale = 1f; // Resume the game
         SceneManager.LoadScene("MainMenu");
