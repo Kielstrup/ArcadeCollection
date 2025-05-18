@@ -48,11 +48,7 @@ public class Tetromino : MonoBehaviour
         {
             fallTime = 1f;
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            FindObjectOfType<TetrisGameManager>().HoldCurrentTetromino();
-            enabled = false;
-        }
+    
     }
 
     void Move(UnityEngine.Vector3 direction)

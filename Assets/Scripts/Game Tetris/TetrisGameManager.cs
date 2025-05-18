@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
@@ -24,9 +25,15 @@ public class TetrisGameManager : MonoBehaviour
     public Transform holdPoint;
     public Transform nextPoint;
 
+    public float baseFallTime = 1f;
+
+    public float fallTimeDecrease = 0.05f;
+    private float currentFallTime;
+
     private void Start()
     {
         gameOverPanel.SetActive(false);
+        currentFallTime = baseFallTime;
 
         SpawnNextTetrominoPreview();
 
@@ -66,8 +73,16 @@ public class TetrisGameManager : MonoBehaviour
 
     public void SpawnNewTetromino()
     {
-        currentTetromino = Instantiate(nextTetromino, spawnPoint.position, quaternion.identity);
+        currentTetromino = Instantiate(nextTetromino, spawnPoint.position,Quaternion.identity);
         holdUsedThisTurn = false;
+
+        Tetromino t = currentTetromino.GetComponent<Tetromino>();
+        if (t != null)
+        {
+            t.fallTime = currentFallTime;
+        }
+
+        currentFallTime = Math.Max(0.1f, currentFallTime - fallTimeDecrease);
 
         SpawnNextTetrominoPreview();
     }
