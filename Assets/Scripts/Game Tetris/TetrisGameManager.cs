@@ -35,7 +35,7 @@ public class TetrisGameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    void SpawnNewTetromino()
+    public void SpawnNewTetromino()
     {
         int spawnX = Tetromino.gridWidth / 2;
         int spawnY = Tetromino.gridHeight;
