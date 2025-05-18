@@ -1332,7 +1332,7 @@ MonoBehaviour:
   holdPoint: {fileID: 1765520439}
   nextPoint: {fileID: 316830615}
   baseFallTime: 1
-  fallTimeDecrease: 0.05
+  fallTimeDecrease: 0.02
   currentFallTime: 0
 --- !u!4 &493674889
 Transform:

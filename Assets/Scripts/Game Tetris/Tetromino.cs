@@ -34,6 +34,7 @@ public class Tetromino : MonoBehaviour
     /// </summary>
     void Update()
     {
+        Debug.Log("Tetromino Update running");
         if (Time.time - previousTime > fallTime)
         {
             transform.position += Vector3.down;
@@ -75,8 +76,10 @@ public class Tetromino : MonoBehaviour
     /// </summary>
     void Start()
     {
+        Time.timeScale = 1f;
         gameManager = FindObjectOfType<TetrisGameManager>();
         fieldManager = FindObjectOfType<GameFieldManager>();
+        Debug.Log($"Tetromino Start() - gameManager: {(gameManager != null)}, fieldManager: {(fieldManager != null)}");
     }
 
     #endregion

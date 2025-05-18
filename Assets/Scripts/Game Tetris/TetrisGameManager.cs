@@ -38,6 +38,9 @@ public class TetrisGameManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1f;
+        Debug.Log("Number of TetrisGameManager objects: " + FindObjectsOfType<TetrisGameManager>().Length);
+        Debug.Log("TetrisGameManager Start() triggered");
         gameOverPanel.SetActive(false);
         currentFallTime = baseFallTime;
 
@@ -82,18 +85,48 @@ public class TetrisGameManager : MonoBehaviour
     /// </summary>
     public void RestartGame()
     {
+        // Full cleanup of gameplay objects
+        if (currentTetromino != null) Destroy(currentTetromino);
+        if (nextTetrominoPreview != null) Destroy(nextTetrominoPreview);
+        if (holdTetromino != null) Destroy(holdTetromino);
+
+        // Reset values manually in case any linger
+        score = 0;
+        currentFallTime = baseFallTime;
+        holdUsedThisTurn = false;
+
+        // Optional: Clear hold and next tetromino references
+        nextTetromino = null;
+        holdTetromino = null;
+
+        // Reload the scene completely
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
     /// <summary>
     /// Returns to the main menu scene.
     /// </summary>
     public void BackToMainMenu()
     {
+        // Clean up any tetromino-related objects
+        if (currentTetromino != null) Destroy(currentTetromino);
+        if (nextTetrominoPreview != null) Destroy(nextTetrominoPreview);
+        if (holdTetromino != null) Destroy(holdTetromino);
+
+        // Reset all gameplay state
+        score = 0;
+        currentFallTime = baseFallTime;
+        holdUsedThisTurn = false;
+        nextTetromino = null;
+        holdTetromino = null;
+
+        // Load main menu scene
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
+
 
     /// <summary>
     /// Spawns the current tetromino from the next tetromino, updates fall speed, and prepares the next preview.
@@ -106,10 +139,16 @@ public class TetrisGameManager : MonoBehaviour
         Tetromino t = currentTetromino.GetComponent<Tetromino>();
         if (t != null)
         {
+            Debug.Log("Spawned new Tetromino with fallTime: " + t.fallTime + ", enabled: " + t.enabled);
             t.fallTime = currentFallTime;
+        }
+        else
+        {
+            Debug.LogError("Tetromino script missing on prefab!");
         }
 
         // Decrease fall time but never below 0.1 seconds
+        
         currentFallTime = Math.Max(0.1f, currentFallTime - fallTimeDecrease);
 
         SpawnNextTetrominoPreview();
@@ -180,4 +219,11 @@ public class TetrisGameManager : MonoBehaviour
         score += linesCleared * 100;
         uiManager.UpdateScore(score);
     }
+
+    public void ResetTetrisScene()
+    {
+        Time.timeScale = 1f; // Resume normal game speed
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reload the current scene
+    }
+
 }

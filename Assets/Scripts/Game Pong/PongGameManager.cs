@@ -103,6 +103,7 @@ public class PongGameManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        Time.timeScale = 1f;
         isGameStarted = false;
         UpdateScoreUI();
         startPanel.SetActive(true);
